@@ -5,8 +5,6 @@ const userModel = require('../models/user');
 // 64 octets Clé de cryptage
 const accessSecretKey = process.env.ACCESS_TOKEN_SECRET;
 const refreshSecretKey = process.env.REFRESH_TOKEN_SECRET;
-const currentTime = Math.floor(Date.now() / 1000);
-
 // Middleware de génération de token
 const createAccessToken = async (userTokenInfo) => {
     return jwt.sign({ userTokenInfo }, accessSecretKey, { expiresIn: 60 * 60 * 24 });
@@ -15,26 +13,6 @@ const createAccessToken = async (userTokenInfo) => {
 const createRefreshToken = async (userTokenInfo) => {
     return jwt.sign({ userTokenInfo }, refreshSecretKey, { expiresIn: 60 * 60 * 24 * 7 });
 };
-
-const expirationTimeChecker = (jwtExpTime) => {
-    const twentyPercentBeforeExpTime = jwtExpTime - (jwtExpTime - currentTime) * 0.2;
-
-    // Vérifiez s'il a été terminé à ou 20 % avant l'heure de fin
-    if (!jwtExpTime) {
-        console.log('Le jeton JWT a déjà expiré.');
-        return false;
-    } else if (currentTime >= jwtExpTime) {
-        console.log('Le jeton JWT a expiré.');
-        return false;
-    } else if (currentTime >= twentyPercentBeforeExpTime) {
-        console.log('Les jetons JWT correspondent à il y a 20 %.');
-        return false;
-    } else {
-        console.log('Les jetons JWT sont toujours valides');
-        return true;
-    }
-};
-
 
 
 module.exports = {
@@ -89,8 +67,9 @@ module.exports = {
                 if (tokenUpdate) {
                     console.log(`l'informations de l'utilisateur a été mises à jour.`);
                     res.cookie('refreshToken', newRefreshToken, {
-                        httpOnly: false,
+                        httpOnly: true,
                         secure: false,
+                        sameSite: 'Strict',
                         expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1 * 1000)
                     });
 

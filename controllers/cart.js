@@ -34,7 +34,7 @@ module.exports = {
                 return res.json({ result: false });
             }
         } catch (error) {
-            'Error: ' + error;
+            return res.status(500).json({ result: false, error: error.message });
         }
     },
     cartLoad: async (req, res) => {
@@ -55,7 +55,7 @@ module.exports = {
             }
             return res.json({ result: true, cartList: foundUser.cartList });
         } catch (error) {
-            'Error: ' + error;
+            return res.status(500).json({ result: false, error: error.message });
         }
     },
     cartDelete: async (req, res) => {
@@ -71,7 +71,7 @@ module.exports = {
 
             return res.json({ result: true });
         } catch (error) {
-            'Error: ' + error;
+            return res.status(500).json({ result: false, error: error.message });
         }
     }
 };

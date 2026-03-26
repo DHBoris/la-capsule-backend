@@ -31,10 +31,10 @@ server.listen(5500, () => {
     console.log("serveur lancé et a l'ecoute sur le port 5500");
 
     // suppression du message de warning dans la console
-    mongoose.set('strictQuery', false);
+    mongoose.set('strictQuery', true);
 
     //connexion a la base mongoDB LaCapsule
-    mongoose.connect('mongodb://127.0.0.1:27017/LaCapsule');
+    mongoose.connect(process.env.MONGOLINK || 'mongodb://127.0.0.1:27017/LaCapsule');
 
     const db = mongoose.connection;
     // once -> une fois que

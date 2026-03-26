@@ -1,11 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { tokenVerifier } = require('../middleware/tokenVerifier');
-const milkController = require('../controllers/milk');
-const toppingController = require('../controllers/topping');
-const coffeeController = require('../controllers/coffee');
-const specialCoffeeController = require('../controllers/specialCoffee');
-const commandeController = require('../controllers/commande');
 const cartController = require('../controllers/cart');
 const messageController = require('../controllers/message');
 const photoController = require('../controllers/photo');
@@ -41,11 +36,11 @@ router.post('/cartDelete', tokenVerifier, cartController.cartDelete);
 
 router.post('/message', messageController.create);
 
-router.post('/uploadPhoto', photoController.uploadPhoto);
+router.post('/uploadPhoto', tokenVerifier, photoController.uploadPhoto);
 
-router.get('/loadPhoto', photoController.loadPhoto);
+router.get('/loadPhoto', tokenVerifier, photoController.loadPhoto);
 
-router.post('/create-checkout-session', stripeController.createCheckoutSession);
+router.post('/create-checkout-session', tokenVerifier, stripeController.createCheckoutSession);
 
 router.post('/order-confirmation', orderConfirmationController.sendConfirmation);
 

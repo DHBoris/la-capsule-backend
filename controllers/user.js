@@ -73,8 +73,9 @@ module.exports = {
 
             // Définir un cookie avec l'userRefreshToken
             res.cookie('refreshToken', userRefreshToken, {
-                httpOnly: false,
+                httpOnly: true,
                 secure: false,
+                sameSite: 'Strict',
                 expires: new Date(Date.now() + 3 * 7 * 24 * 60 * 60 * 1000)
             });
 
@@ -116,8 +117,8 @@ module.exports = {
                 const hash = bcrypt.hashSync(password, cost);
 
                 const newUser = new userModel({
-                    firstName: lastName,
-                    lastName: firstName,
+                    firstName: firstName,
+                    lastName: lastName,
                     email: email,
                     phoneNumber: phoneNumber,
                     password: hash,

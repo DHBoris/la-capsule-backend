@@ -6,8 +6,8 @@ module.exports = {
             const { firstName, lastName, email, callNumber, message, politique } = req.body;
 
             const newMessage = new messageModel({
-                firstname: firstName,
-                lastname: lastName,
+                firstName: firstName,
+                lastName: lastName,
                 email: email,
                 callNumber: callNumber,
                 message: message,
@@ -27,7 +27,8 @@ module.exports = {
                 });
             }
         } catch (err) {
-            console.log(err);
+            console.error(err);
+            return res.status(500).json({ result: false, error: err.message });
         }
     },
 };

@@ -5,7 +5,17 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+        if (!allowedMimes.includes(file.mimetype)) {
+            return cb(new Error('Type de fichier non autorisé. Seuls jpeg, png, webp et gif sont acceptés.'));
+        }
+        cb(null, true);
+    },
+    limits: { fileSize: 5 * 1024 * 1024 }
+});
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

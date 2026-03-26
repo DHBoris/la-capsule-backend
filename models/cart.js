@@ -10,7 +10,6 @@ const cartSchema = Schema({
     vegan: Boolean,
     type: String,
     caffeine: Boolean,
-    Boolean,
     size: Number,
     price: Number,
     quantity: Number
