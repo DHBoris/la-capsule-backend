@@ -78,5 +78,20 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ result: false, error: error.message });
         }
+    },
+    cartClear: async (req, res) => {
+        const userInfo = res.locals.userInfo;
+        try {
+            const foundUser = await userModel.findOne({ email: userInfo });
+            if (!foundUser) return res.json({ result: false });
+
+            await cartModel.deleteMany({ _id: { $in: foundUser.cartList } });
+            foundUser.cartList = [];
+            await foundUser.save();
+
+            return res.json({ result: true });
+        } catch (error) {
+            return res.status(500).json({ result: false, error: error.message });
+        }
     }
 };
