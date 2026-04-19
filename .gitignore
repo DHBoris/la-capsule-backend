@@ -3,6 +3,7 @@
 .idea/
 .vscode
 .env
+.env.example
 
 # dependencies
 /node_modules
