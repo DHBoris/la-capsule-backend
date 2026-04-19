@@ -25,9 +25,8 @@ module.exports = {
         // console.log(authorizationHeader);
 
         if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-            console.log('Non autorisé');
+            return res.status(401).send('Non autorisé. Token manquant.');
         }
-        if (!req.body) console.log(`Pas d'accès.`);
 
         const accessToken = authorizationHeader.split(' ')[1];
         const refreshToken = req.cookies['refreshToken'];

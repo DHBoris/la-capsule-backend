@@ -1,5 +1,6 @@
 const cartModel = require('../models/cart');
 const userModel = require('../models/user');
+const mongoose = require('mongoose');
 
 module.exports = {
     cartAdd: async (req, res) => {
@@ -59,15 +60,19 @@ module.exports = {
         }
     },
     cartDelete: async (req, res) => {
-        const product = req.body.id
-        console.log(product);
+        const product = req.body.id;
+        const userInfo = res.locals.userInfo;
         try {
             const foundProduct = await cartModel.findOneAndDelete({ id: product });
 
             if (!foundProduct) {
-                console.log('Product not found');
                 return res.json({ result: false });
             }
+
+            await userModel.findOneAndUpdate(
+                { email: userInfo },
+                { $pull: { cartList: foundProduct._id } }
+            );
 
             return res.json({ result: true });
         } catch (error) {
